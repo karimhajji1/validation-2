@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <form>
+        <label id="title_div">
+            Title:<input id="title" type="text">
+            <p id="title_par"></p>
+        </label>
+
+        <label id="author_div">
+            Author:<input id="author" type="text">
+            <p id="author_par"></p>
+        </label>
+
+        <label id="email_div">
+            Email:<input id="email_author" type="text">
+            <p id="email_par"></p>
+        </label>
+
+        <label id="price_div">
+            Price:<input id="price" type="text">
+            <p id="price_par"></p>
+        </label>
+
+        <label id="pub_div">
+            Publication Date:<input id="pub" type="date">
+            <p id="pub_par"></p>
+        </label>
+
+        <label id="lang_div">
+            Language:
+            <select value="type" id="lang">
+                <option disabled selected hidden value>-- Select a language --</option>
+                <option value="Arabic">Arabic</option>
+                <option value="English">English</option>
+                <option value="French">French</option>
+            </select>
+            <p id="lang_par"></p>
+        </label>
+
+        <div id="type_div" style="position: relative;">
+            <span
+                style="text-align: center;font-size: 20px;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Type:
+            </span>
+            <fieldset>
+                <label><input class="type" type="radio" value="roman" name="type">Roman</label>
+                <label><input class="type" type="radio" value="essay" name="type">Essay</label>
+                <label><input class="type" type="radio" value="comic" name="type">comic book</label>
+            </fieldset>
+            <p id="type_par"></p>
+        </div>
+
+        <input type="submit" value="Submit" id="submit_btn">
+    </form>
+
+    <table id="table">
+        <tr>
+            <td>Title</td>
+            <td>Author</td>
+            <td>Price</td>
+            <td>Publication Date</td>
+            <td>Language</td>
+            <td>Type</td>
+            <td>Controls</td>
+        </tr>
+    </table>
+
+    <script>
+        var form_el = document.getElementsByTagName("form")[0];
+        var form_inputs = document.getElementsByTagName("input");
+        var title = document.getElementById("title");
+        var author = document.getElementById("author");
+        var email_author = document.getElementById("email_author");
+        var price = document.getElementById("price");
+        var pub = document.getElementById("pub");
+        var lang = document.getElementById("lang");
+        var type = document.getElementsByClassName("type");
+        var type_par = document.getElementById("type_par");
+        var max_length = 30;
+        var is_checked = false;
+        var table = document.getElementById("table");
+
+        class Books{
+            constructor(title, author, email_author, price, pud_date,){
+
+            }
+        }
+
+        function validate(e) {
+            e.preventDefault();
+            var form_not_valid = 0;
+
+            //basic check
+            for (var i = 0; i < 4; i++) {
+                if (form_inputs[i].value == "") {
+                    form_not_valid++;
+                    form_inputs[i].style.borderColor = "red";
+                    form_inputs[i].nextElementSibling.style.color = "red";
+                    form_inputs[i].nextElementSibling.innerHTML = "please fill this field";
+                }
+                else {
+                    form_inputs[i].style.borderColor = "green"
+                    form_inputs[i].nextElementSibling.style.color = "green";
+                    form_inputs[i].nextElementSibling.innerHTML = "ok!";
+                }
+            }
+
+            //title check
+            if (title.value.length > max_length) {
+                form_not_valid++;
+                title.style.borderColor = "red"
+                title.nextElementSibling.innerHTML = "max " + max_length;
+                title.nextElementSibling.style.color = "red";
+            }
+
+            //author check
+            if (author.value.length > max_length) {
+                form_not_valid++;
+                author.style.borderColor = "red";
+                author.nextElementSibling.innerHTML = "max " + max_length;
+                author.nextElementSibling.style.color = "red";
+            }
+
+            //Email check
+            var email_check = /\w+@gmail\.com/;
+            var email_check2 = /\s/;
+            if(!email_check.test(email_author.value) && email_author.value!=""){
+                if(email_check2.test(email_author.value)){
+
+                }
+                form_not_valid++;
+                email_author.style.borderColor = "red";
+                email_author.nextElementSibling.innerHTML = "Invalid email format";
+                email_author.nextElementSibling.style.color = "red";
+            }
+            else{
+                email_author.style.borderColor = "green";
+                email_author.nextElementSibling.style.color = "green";
+                email_author.nextElementSibling.innerHTML = "ok!";
+            }
+
+            //price check
+            var price_check1 = /[a-zA-Z]/;
+            var price_check2 = /^[0-9]+\.[0-9]{2}$/;
+            if (price_check1.test(price.value)) {
+                form_not_valid++;
+                price.style.borderColor = "red";
+                price.nextElementSibling.innerHTML = "numbers only";
+                price.nextElementSibling.style.color = "red";
+            }
+            else if (!price_check2.test(price.value)) {
+                price.style.borderColor = "red";
+                form_not_valid++;
+                price.nextElementSibling.innerHTML = "invalid price format";
+                price.nextElementSibling.style.color = "red";
+            }
+
+            //language check
+            if (lang.value == "") {
+                form_not_valid++;
+                lang.style.borderColor = "red";
+                lang.nextElementSibling.style.color = "red";
+                lang.nextElementSibling.innerHTML = "please choose a language";
+            }
+            else {
+                lang.style.borderColor = "green";
+                lang.nextElementSibling.style.color = "green";
+                lang.nextElementSibling.innerHTML = "ok!";
+            }
+
+            //type check
+            for (var i = 0; i < type.length; i++) {
+                if (type[i].checked) {
+                    is_checked = true;
+                    break;
+                }
+                else {
+                    is_checked = false;
+                }
+            }
+            if (is_checked) {
+                type_par.innerHTML = "ok!";
+                type_par.style.color = "green";
+            }
+            else {
+                if (dlt.classList.contains("dlt_btn")) {
+                    dlt.closest("tr").remove();
+                }
+                form_not_valid++;
+                type_par.innerHTML = "please select a type!";
+                type_par.style.color = "red";
+            }
+
+            //insert row
+            if (form_not_valid == 0) {
+                var row = table.insertRow();
+                row.insertCell(0).innerHTML = title.value;
+                row.insertCell(1).innerHTML = author.value;
+                row.insertCell(2).innerHTML = price.value;
+                row.insertCell(3).innerHTML = pub.value;
+                var index = lang.selectedIndex;
+                row.insertCell(4).innerHTML = lang.options[index].value;
+                row.insertCell(5).innerHTML = "<input class='edit_btn' onclick='edit_row(this)' type='button' value='Edit'>" +
+                    "<input class='dlt_btn' onclick='dlt_row(this)' type='button' value='Delete'>";
+
+                //type
+                var temp_cell = "";
+                for (var i = 0; i < type.length; i++) {
+                    if (type[i].checked) {
+                        temp_cell = type[i].value;
+                    }
+                }
+                row.insertCell(5).innerHTML = temp_cell;
+            }
+        }
+        // document.getElementById("table").addEventListener("click", function(e){
+        //     var dlt = e.target;
+        //     if(dlt.classList.contains("dlt_btn")){
+        //         dlt.closest("tr").remove();
+        //     }
+        // });
+
+        // Delete function;
+        function dlt_row(r) {
+            if(confirm("")){
+                var i = r.parentNode.parentNode.rowIndex;
+                table.deleteRow(i);
+            }
+        }
+
+        // Edit function;
+        function edit_row(r) {
+            var i = r.parentNode.parentNode.rowIndex;
+            var row = table.rows[i];
+            if (r.value == "Edit") {
+                title.value = row.cells[0].innerHTML;
+                author.value = row.cells[1].innerHTML;
+                price.value = row.cells[2].innerHTML;
+                pub.value = row.cells[3].innerHTML;
+                lang.value = row.cells[4].innerHTML;
+
+                // Type
+                for (var i = 0; i < type.length; i++) {
+                    if (row.cells[5].innerHTML == type[i].value) {
+                        type[i].checked = true;
+                    }
+                }
+                r.value = "Save"
+                document.getElementById("submit_btn").setAttribute("disabled", "true");
+            }
+            else {
+                row.cells[0].innerHTML = title.value;
+                row.cells[1].innerHTML = author.value;
+                row.cells[2].innerHTML = price.value;
+                row.cells[3].innerHTML = pub.value;
+                row.cells[4].innerHTML = lang.options[lang.selectedIndex].value;
+                for (var i = 0; i < type.length; i++) {
+                    if (type[i].checked) {
+                        row.cells[5] = type[i].value;
+                    }
+                }
+                r.value = "Edit";
+                document.getElementById("submit_btn").removeAttribute("disabled")
+            }
+        }
+
+        form_el.addEventListener("submit", validate)
+    </script>
+</body>
+
+</html> 
