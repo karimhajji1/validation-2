@@ -1,280 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Document</title>
-</head>
-
-<body>
-    <form>
-        <label id="title_div">
-            Title:<input id="title" type="text">
-            <p id="title_par"></p>
-        </label>
-
-        <label id="author_div">
-            Author:<input id="author" type="text">
-            <p id="author_par"></p>
-        </label>
-
-        <label id="email_div">
-            Email:<input id="email_author" type="text">
-            <p id="email_par"></p>
-        </label>
-
-        <label id="price_div">
-            Price:<input id="price" type="text">
-            <p id="price_par"></p>
-        </label>
-
-        <label id="pub_div">
-            Publication Date:<input id="pub" type="date">
-            <p id="pub_par"></p>
-        </label>
-
-        <label id="lang_div">
-            Language:
-            <select value="type" id="lang">
-                <option disabled selected hidden value>-- Select a language --</option>
-                <option value="Arabic">Arabic</option>
-                <option value="English">English</option>
-                <option value="French">French</option>
-            </select>
-            <p id="lang_par"></p>
-        </label>
-
-        <div id="type_div" style="position: relative;">
-            <span
-                style="text-align: center;font-size: 20px;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Type:
-            </span>
-            <fieldset>
-                <label><input class="type" type="radio" value="roman" name="type">Roman</label>
-                <label><input class="type" type="radio" value="essay" name="type">Essay</label>
-                <label><input class="type" type="radio" value="comic" name="type">comic book</label>
-            </fieldset>
-            <p id="type_par"></p>
-        </div>
-
-        <input type="submit" value="Submit" id="submit_btn">
-    </form>
-
-    <table id="table">
-        <tr>
-            <td>Title</td>
-            <td>Author</td>
-            <td>Price</td>
-            <td>Publication Date</td>
-            <td>Language</td>
-            <td>Type</td>
-            <td>Controls</td>
-        </tr>
-    </table>
-
-    <script>
-        var form_el = document.getElementsByTagName("form")[0];
-        var form_inputs = document.getElementsByTagName("input");
-        var title = document.getElementById("title");
-        var author = document.getElementById("author");
-        var email_author = document.getElementById("email_author");
-        var price = document.getElementById("price");
-        var pub = document.getElementById("pub");
-        var lang = document.getElementById("lang");
-        var type = document.getElementsByClassName("type");
-        var type_par = document.getElementById("type_par");
-        var max_length = 30;
-        var is_checked = false;
-        var table = document.getElementById("table");
-
-        class Books{
-            constructor(title, author, email_author, price, pud_date,){
-
-            }
+    <style>
+        label{
+            display: block;
         }
+        table{
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    <form name="myForm">
+        <label>Titre: *</label>
+        <input type="text" name="titre" placeholder=" Titre" size="25"id="titre" />
+        <label>Auteur: *</label>
+        <input type="text" name="auteur" placeholder="Auteur" size="25" id="auteur"/>
+        <label >Email: *</label>
+        <input type="text" name="email" id="email" placeholder="E-mail">
+        <label>Prix: *</label>
+        <input type="text" name="prix" size="25" placeholder=" prix"id="prix" />
+        <label>Date De Publication: *</label>
+        <input type="date" name="date" id="date"/>
+        <label >La Langue: *</label>
+        <select id="langue" name="langue"id="langue">
+            <option id="select" disabled hidden selected value="">select</option>
+            <option value="francais">Français</option>
+            <option value="anglais">anglais</option>
+            <option value="arabe">arabe</option>
+        </select><br>
+        <label >Le Type : *</label>
+            <input type="radio" id="Roman" name="Roman" data-value="" value="Roman" class="radio" id="th6">
+            <label for="Roman">Roman</label>
+            <input type="radio" id="Essai" name="Roman" value="Essai"class="radio" id="th6">
+            <label for="Essai">Essai</label>
+            <input type="radio" id="Bande-Dessinée" name="Roman" value="Bande-Dessinée" class="radio" id="th6">
+            <label for="Bande-Dessinée">Bande-Dessinée</label> 
+            <p></p>
+           
+        <input type="button" value="Register" class="input"id="button" />
+        <input type="reset" value="Clear" onclick="clear2();" id="submit"/>
+        <button onclick="imprimer()">imprimer</button>
+           
+</form>
+<table border="1">
+    <thead>
+    <tr>
+        <td>Title</td>
+        <td>Author</td>
+        <td>Email</td>
+        <td>Price</td>
+        <td>Publication Date</td>
+        <td>Language</td>
+        <td>Type</td>
+        <td>Controls</td>
+    </tr>
+    </thead>
+    <tbody id="tbody">
 
-        function validate(e) {
-            e.preventDefault();
-            var form_not_valid = 0;
+    </tbody>
+</table>
+<script>
+    var titre  = document.getElementById('titre');
+    var auteur = document.getElementById('auteur');
+    var email  = document.getElementById('email');
+    var prix   = document.getElementById('prix');
+    var date   = document.getElementById('date');
+    var langue = document.getElementById('langue');
+    var type   = document.querySelector('input[name="Roman"]:checked');
 
-            //basic check
-            for (var i = 0; i < 4; i++) {
-                if (form_inputs[i].value == "") {
-                    form_not_valid++;
-                    form_inputs[i].style.borderColor = "red";
-                    form_inputs[i].nextElementSibling.style.color = "red";
-                    form_inputs[i].nextElementSibling.innerHTML = "please fill this field";
-                }
-                else {
-                    form_inputs[i].style.borderColor = "green"
-                    form_inputs[i].nextElementSibling.style.color = "green";
-                    form_inputs[i].nextElementSibling.innerHTML = "ok!";
-                }
+    var lable_1 =document.getElementsByTagName('label')[0];
+    var lable_2 =document.getElementsByTagName('label')[1];
+    var lable_3 =document.getElementsByTagName('label')[2];
+    var lable_4 =document.getElementsByTagName('label')[3];
+    var lable_5 =document.getElementsByTagName('label')[4];
+    var lable_6 =document.getElementsByTagName('label')[5];
+    var lable_7 =document.getElementsByTagName('label')[6];
+    
+    var form = document.getElementsByTagName('form')[0];
+    var table1 =document.getElementsByTagName('table')[0];
+
+    var myTbody = document.getElementById('tbody');
+    var button = document.getElementById('button');
+    
+    var regPrix = /^[0-9]+((.[0-9]{2})|())$/;
+    var regEmail = /^(((\w+)(.)(\w+))|((\w+)))(@)(\w+)(.)(\w+)$/;
+
+    var list = [];
+    var typeList="";
+    var p = document.getElementsByTagName("p")[0];
+
+    class ouvrage{
+        constructor(letitre , leauteur , leemail , leprix , ledate , lelangue , letype ){
+            this.Titre  = letitre;
+            this.Auteur = leauteur;
+            this.Email  = leemail;
+            this.Prix   = leprix ;
+            this.Date   = ledate;
+            this.Langue = lelangue;
+            this.Type   = letype;
+       
+        }
+        message(p){
+                return `L'ouvrage ${this.Titre}` ;
+                // return `L'ouvrage '${this.title}' est un '${this.type}' en langue '${this.lang}', écrit par '${this.author}' et publié le '${this.pub_date}'. Le prix de '${this.title}' est de '${this.price}' Dhs.`
+
             }
 
-            //title check
-            if (title.value.length > max_length) {
-                form_not_valid++;
-                title.style.borderColor = "red"
-                title.nextElementSibling.innerHTML = "max " + max_length;
-                title.nextElementSibling.style.color = "red";
-            }
+    }
+var temp_list = "";
+temp_list = JSON.parse(localStorage.getItem("list"));
+if(temp_list !=null){
+    for(i=0; i<temp_list.length;i++){
+        var ouvrageLocal =  new ouvrage(temp_list[i].Titre , temp_list[i].Auteur , temp_list[i].Email , temp_list[i].Prix , temp_list[i].Date , temp_list[i].Langue , temp_list[i].Type );
+             list.push(ouvrageLocal);
+             
+             sort_titre()
+    }
+}
+    
 
-            //author check
-            if (author.value.length > max_length) {
-                form_not_valid++;
-                author.style.borderColor = "red";
-                author.nextElementSibling.innerHTML = "max " + max_length;
-                author.nextElementSibling.style.color = "red";
-            }
+    
+charger();
 
-            //Email check
-            var email_check = /\w+@gmail\.com/;
-            var email_check2 = /\s/;
-            if(!email_check.test(email_author.value) && email_author.value!=""){
-                if(email_check2.test(email_author.value)){
+    button.addEventListener('click', function(e){ 
+        
+        var titreValid  = false;
+        var auteurValid = false;
+        var emailValid  = false;
+        var prixValid   = false;
+        var dateValid   = false;
+        var langueValid = false;
+        var typeValid   = false;
+        //validation titre
+        if(titre.value.length >=30){
+            titreValid = false;
+            lable_1.innerHTML="Max => 30";
+            lable_1.style.color="red"
 
-                }
-                form_not_valid++;
-                email_author.style.borderColor = "red";
-                email_author.nextElementSibling.innerHTML = "Invalid email format";
-                email_author.nextElementSibling.style.color = "red";
+            if (!isNaN(titre.value)){
+            titreValid = false;
+            lable_1.innerHTML="Only Text";
+            lable_1.style.color="red";
+        }
+        }
+        else if(titre.value==""){
+            titreValid = false;
+            lable_1.innerHTML="Requist *";
+            lable_1.style.color="red"
+        }
+        
+        
+        else if(titre.value !==""){
+            titreValid=true;
+            lable_1.innerHTML="Titre: *";
+            lable_1.style.color="black";
+        }
+        
+        
+    
+        //validation auteur
+    
+        if(auteur.value.length >=30){
+            auteurValid = false;
+            lable_2.innerHTML="Max => 30";
+            lable_2.style.color="red"
+
+            if (!isNaN(auteur.value)){
+            auteurValid= false;
+            lable_2.innerHTML="Only Text";
+            lable_2.style.color="red";
+        }
+        }
+        else if(auteur.value==""){
+            auteurValid = false;
+            lable_2.innerHTML="Requist *";
+            lable_2.style.color="red"
+        }
+        
+        
+        else if(auteur.value !==""){
+            auteurValid=true;
+            lable_2.innerHTML="Auteur: *";
+            lable_2.style.color="black";
+        }
+          //validation email
+
+        if(email.value !==""){
+            if(regEmail.test(email.value)){
+                emailValid =true;
+                lable_3.innerHTML="Email: *";
+                lable_3.style.color="black";
             }
             else{
-                email_author.style.borderColor = "green";
-                email_author.nextElementSibling.style.color = "green";
-                email_author.nextElementSibling.innerHTML = "ok!";
-            }
-
-            //price check
-            var price_check1 = /[a-zA-Z]/;
-            var price_check2 = /^[0-9]+\.[0-9]{2}$/;
-            if (price_check1.test(price.value)) {
-                form_not_valid++;
-                price.style.borderColor = "red";
-                price.nextElementSibling.innerHTML = "numbers only";
-                price.nextElementSibling.style.color = "red";
-            }
-            else if (!price_check2.test(price.value)) {
-                price.style.borderColor = "red";
-                form_not_valid++;
-                price.nextElementSibling.innerHTML = "invalid price format";
-                price.nextElementSibling.style.color = "red";
-            }
-
-            //language check
-            if (lang.value == "") {
-                form_not_valid++;
-                lang.style.borderColor = "red";
-                lang.nextElementSibling.style.color = "red";
-                lang.nextElementSibling.innerHTML = "please choose a language";
-            }
-            else {
-                lang.style.borderColor = "green";
-                lang.nextElementSibling.style.color = "green";
-                lang.nextElementSibling.innerHTML = "ok!";
-            }
-
-            //type check
-            for (var i = 0; i < type.length; i++) {
-                if (type[i].checked) {
-                    is_checked = true;
-                    break;
-                }
-                else {
-                    is_checked = false;
-                }
-            }
-            if (is_checked) {
-                type_par.innerHTML = "ok!";
-                type_par.style.color = "green";
-            }
-            else {
-                if (dlt.classList.contains("dlt_btn")) {
-                    dlt.closest("tr").remove();
-                }
-                form_not_valid++;
-                type_par.innerHTML = "please select a type!";
-                type_par.style.color = "red";
-            }
-
-            //insert row
-            if (form_not_valid == 0) {
-                var row = table.insertRow();
-                row.insertCell(0).innerHTML = title.value;
-                row.insertCell(1).innerHTML = author.value;
-                row.insertCell(2).innerHTML = price.value;
-                row.insertCell(3).innerHTML = pub.value;
-                var index = lang.selectedIndex;
-                row.insertCell(4).innerHTML = lang.options[index].value;
-                row.insertCell(5).innerHTML = "<input class='edit_btn' onclick='edit_row(this)' type='button' value='Edit'>" +
-                    "<input class='dlt_btn' onclick='dlt_row(this)' type='button' value='Delete'>";
-
-                //type
-                var temp_cell = "";
-                for (var i = 0; i < type.length; i++) {
-                    if (type[i].checked) {
-                        temp_cell = type[i].value;
-                    }
-                }
-                row.insertCell(5).innerHTML = temp_cell;
+                lable_3.innerHTML="Email not valid";
+                lable_3.style.color="red";
             }
         }
-        // document.getElementById("table").addEventListener("click", function(e){
-        //     var dlt = e.target;
-        //     if(dlt.classList.contains("dlt_btn")){
-        //         dlt.closest("tr").remove();
-        //     }
-        // });
+        else if(email.value==""){
+            emailValid=false;
+            lable_3.innerHTML="Requist *";
+            lable_3.style.color="red"
+        }
+         //validation prix
 
-        // Delete function;
-        function dlt_row(r) {
-            if(confirm("")){
-                var i = r.parentNode.parentNode.rowIndex;
-                table.deleteRow(i);
+        if(prix.value !==""){
+            if(regPrix.test(prix.value)){
+                prixValid =true;
+                lable_4.innerHTML="Prix: *";
+                lable_4.style.color="black";
+            }
+            else{
+                lable_4.innerHTML="Only Number";
+                lable_4.style.color="red";
+            }
+            
+
+        }
+        else if(prix.value==""){
+            prixValid=false;
+             lable_4.innerHTML="Requist *";
+            lable_4.style.color="red";
+        }
+        //validation date
+
+        if(date.value==""){
+            dateValid=false;
+            lable_5.innerHTML="Requist *";
+            lable_5.style.color="red";
+        }
+        else if(date.value !==""){
+            dateValid=true;
+            lable_5.innerHTML="Date De Publication: *";
+            lable_5.style.color="black";
+        }
+        //validation langue
+
+        if(langue.value ==""){
+            langueValid=false;
+            lable_6.innerHTML="Requist *";
+            lable_6.style.color="red";
+        }
+        else if(langue.value !==""){
+            langueValid=true;
+            lable_6.innerHTML="Langue: *";
+            lable_6.style.color="black";
+        }
+         //validation type
+    //      if(Roman1.checked||Essai2.checked||Bande3.checked){
+    //     h4.innerHTML ="Le Type: *";
+    //     h4.style.color ="black"
+    //     valid = false ;
+    //    }
+    
+        var x = document.getElementsByClassName("radio");
+        for(var i=0; i<x.length; i++){
+            if(x[i].checked){
+                typeValid=true;
+                lable_7.innerHTML="Le Type : *";
+                lable_7.style.color="black";
+                typeList = x[i].value;
+                
+                break;
+            }
+        
+        else{
+            lable_7.innerHTML="Requist *";
+            lable_7.style.color="red";
+        }
+    }
+    
+        if(titreValid ===false || auteurValid === false ||emailValid === false||prixValid ===false || dateValid ===false 
+        || langueValid===false || typeValid===false){
+            e.preventDefault();
+        }
+        
+        if(titreValid ==true && auteurValid == true && prixValid ==true && emailValid ==true && dateValid==true && langueValid==true && typeValid==true){
+            
+            var onOvrage = new ouvrage(titre.value , auteur.value , email.value , prix.value , date.value , langue.value , typeList );
+             list.push(onOvrage);
+             localStorage.setItem("list", JSON.stringify(list));
+             p.innerHTML = onOvrage.message();
+             myTbody.innerHTML="";
+            charger();
+         }
+         
+          
+        
+
+    });
+
+    function Dlet(r){
+        var i = r.parentNode.parentNode.rowIndex-1;
+        // myTbody.deleteRow(i);
+        list.splice(i,1);
+        localStorage.setItem("list",JSON.stringify(list));
+        myTbody.innerHTML="";
+        charger();
+
+    }
+    function edit(et){
+        var x = document.getElementsByClassName("radio");
+        var selectedRow = et.parentNode.parentNode.rowIndex;
+        var row = table1.rows[selectedRow];
+        if(et.value == "edit"){
+            titre.value  = row.cells[0].innerHTML;
+            auteur.value = row.cells[1].innerHTML;
+            email.value  = row.cells[2].innerHTML;
+            prix.value   = row.cells[3].innerHTML;
+            date.value   = row.cells[4].innerHTML;
+            langue.value = row.cells[5].innerHTML;
+            for(var i=0; i<x.length; i++){
+            if( row.cells[6].innerHTML == x[i].value ){
+            
+                x[i].checked =true;  
             }
         }
-
-        // Edit function;
-        function edit_row(r) {
-            var i = r.parentNode.parentNode.rowIndex;
-            var row = table.rows[i];
-            if (r.value == "Edit") {
-                title.value = row.cells[0].innerHTML;
-                author.value = row.cells[1].innerHTML;
-                price.value = row.cells[2].innerHTML;
-                pub.value = row.cells[3].innerHTML;
-                lang.value = row.cells[4].innerHTML;
-
-                // Type
-                for (var i = 0; i < type.length; i++) {
-                    if (row.cells[5].innerHTML == type[i].value) {
-                        type[i].checked = true;
-                    }
-                }
-                r.value = "Save"
-                document.getElementById("submit_btn").setAttribute("disabled", "true");
-            }
-            else {
-                row.cells[0].innerHTML = title.value;
-                row.cells[1].innerHTML = author.value;
-                row.cells[2].innerHTML = price.value;
-                row.cells[3].innerHTML = pub.value;
-                row.cells[4].innerHTML = lang.options[lang.selectedIndex].value;
-                for (var i = 0; i < type.length; i++) {
-                    if (type[i].checked) {
-                        row.cells[5] = type[i].value;
-                    }
-                }
-                r.value = "Edit";
-                document.getElementById("submit_btn").removeAttribute("disabled")
-            }
+        
+        et.value="Save";
+        document.getElementById("button").setAttribute("disabled","true");
         }
+        else{
+            list[selectedRow-1].Titre = titre.value;
+            list[selectedRow-1].Auteur = auteur.value;
+            list[selectedRow-1].Email = email.value;
+            list[selectedRow-1].Prix = prix.value;
+            list[selectedRow-1].Date = date.value;
+            list[selectedRow-1].Langue = langue.value;
+            for(var i=0;i<x.length;i++){
+                if(x[i].checked){
+                    list[selectedRow-1].Type = x[i].value;
+                }
+                x[i].checked="";
+            }
+             myTbody.innerHTML="";
+             sort_titre();
+             charger();
+             
+           localStorage.setItem("list",JSON.stringify(list));
+            et.value="edit";
+           document.getElementById("button").removeAttribute("disabled");
+           
+           titre.value=""; 
+            auteur.value="";
+            email.value="";
+            prix.value="";
+            date.value="";
+            langue.value="";
+           
+        }
+        
+        
 
-        form_el.addEventListener("submit", validate)
-    </script>
+    }
+    function charger(){
+           myTbody.innerHTML="";
+        for(var i=0; i<list.length; i++){
+        
+        
+        var row = myTbody.insertRow(-1);
+        
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        var cell7 = row.insertCell(6);
+        var cell8 = row.insertCell(7);
+       
+        cell1.innerHTML = list[i].Titre;
+        cell2.innerHTML = list[i].Auteur;
+        cell3.innerHTML = list[i].Email;
+        cell4.innerHTML = list[i].Prix;
+        cell5.innerHTML = list[i].Date;
+        cell6.innerHTML = list[i].Langue;
+        cell7.innerHTML = list[i].Type;
+        cell8.innerHTML = "<input class='Edit'  type='button' onclick='edit(this)' value='edit'>" +
+                            "<input class='Dlet' type='button'  onclick='Dlet(this)' value='Delete'>";
+        
+    }
+    var radio = "";
+        var x = document.getElementsByClassName("radio");
+        for(var i=0; i<x.length; i++){
+            if(x[i].checked){
+            
+                radio =x[i].value;
+                cell7.innerHTML = radio;
+    
+            }            
+            x[i].checked="";
+        
+        }
+    titre.value=""; 
+            auteur.value="";
+            email.value="";
+            prix.value="";
+            date.value="";
+            langue.value="";  
+    
+    }
+    function sort_titre(){
+        list.sort(function(a,b){
+            if(a.Titre<b.Titre){
+                return -1;
+            }
+        });
+        
+    }
+    function imprimer(){
+        window.print();
+    }
+</script>
 </body>
-
-</html> 
+</html>
