@@ -111,15 +111,17 @@
             }
 
     }
-var temp_list = "";
+var temp_list;
 temp_list = JSON.parse(localStorage.getItem("list"));
 if(temp_list !=null){
+    
     for(i=0; i<temp_list.length;i++){
         var ouvrageLocal =  new ouvrage(temp_list[i].Titre , temp_list[i].Auteur , temp_list[i].Email , temp_list[i].Prix , temp_list[i].Date , temp_list[i].Langue , temp_list[i].Type );
              list.push(ouvrageLocal);
              
-             sort_titre()
+             sort_titre();
     }
+
 }
     
 
